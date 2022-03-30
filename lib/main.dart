@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'answers.dart';
-import 'questions.dart';
+import 'results.dart';
+import 'quiz.dart';
 
 void main() => runApp(Myapp());
 
@@ -12,8 +12,11 @@ class Myapp extends StatefulWidget {
 }
 
 class _MyappState extends State<Myapp> {
+  var _totalScore = 0;
   var _questionindex = 0;
-  void _answerQuestions() {
+  void _answerQuestions(int score) {
+
+    _totalScore += score;
     setState(() {
       _questionindex = _questionindex + 1;
     });
@@ -21,19 +24,34 @@ class _MyappState extends State<Myapp> {
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
+    final _questions = const [
       {
         'question': 'What\'s your name?',
-        'answers': ['Roger', 'Amy', 'James', 'Luna']
-      },
-      {
-        'question': 'What\'s your color?',
-        'answers': ['Red', 'Ample', 'Green', 'Light Yellow']
+        'answers': [
+          {'text': 'Brad', 'score': 1},
+          {'text': 'Mary', 'score': 3},
+          {'text': 'John', 'score': 4},
+          {'text': 'Jack', 'score': 2}
+        ],
       },
       {
         'question': 'What\'s your animal?',
-        'answers': ['Rabbit', 'Ant', 'Jaguar', 'Law']
+        'answers': [
+          {'text': 'Lion', 'score': 9},
+          {'text': 'Ant', 'score': 3},
+          {'text': 'Hen', 'score': 5},
+          {'text': 'Quil', 'score': 2}
+        ],
       },
+      {
+        'question': 'What\'s your color?',
+        'answers': [
+          {'text': 'Red', 'score': 1},
+          {'text': 'Blue', 'score': 3},
+          {'text': 'Green', 'score': 4},
+          {'text': 'Black', 'score': 2}
+        ],
+      }
     ];
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -43,25 +61,14 @@ class _MyappState extends State<Myapp> {
               backgroundColor: Colors.black,
               title: Text("My first app"),
             ),
-            body: _questionindex < questions.length
-                ? Column(
-                    children: <Widget>[
-                      Question(index: questions[_questionindex]['question']),
-                      // final is the runtime final value dun matter while development
-                      //const is the compile time const the final value is not locked but after compiled
-                      //map returns the lazy iterable of the mapping list
-                      // in order to use map, the former must be a list i.e. the thing that you want to iterate
-                      // maps it to the function that you want to use it and change it into list
-                      // ... means that it took all the values in the list and puts them in surrounding list as individual values.
-                      ...(questions[_questionindex]['answers'] as List<String>)
-                          .map((answer) {
-                        return Answer(
-                            handler: _answerQuestions, answer: answer);
-                      }).toList()
-                    ],
+            body: _questionindex < _questions.length
+                ? Quiz(
+                    answerQuestion: _answerQuestions,
+                    index: _questionindex,
+                    questions: _questions,
                   )
-                : Container(
-                    child: Text("You did it"),
-                  )));
+                : Results(totalScore: _totalScore)
+                  )
+                  );
   }
 }
