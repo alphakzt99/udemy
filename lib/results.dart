@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class Results extends StatelessWidget {
   final int totalScore;
-  const Results({Key? key,required this.totalScore}) : super(key: key);
+  final VoidCallback resetHandler;
+  const Results({Key? key,required this.totalScore, required this.resetHandler}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,8 +11,9 @@ class Results extends StatelessWidget {
       alignment: Alignment.center,
       child: Column(
         children: [
-          Text("You did it",style: TextStyle(fontSize: 40),),
-          Text(totalScore.toString(),style: TextStyle(fontSize: 30,color: Colors.blueAccent),)
+          Text("You did it",textAlign: TextAlign.center,style: TextStyle(fontSize: 40,),),
+          Text(totalScore.toString(),textAlign: TextAlign.center,style: TextStyle(fontSize: 30,color: Colors.blueAccent),),
+          ElevatedButton(onPressed: resetHandler, child: Text("Reset"))
         ],
       ),
     );
